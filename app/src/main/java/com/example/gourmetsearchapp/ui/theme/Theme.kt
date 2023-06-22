@@ -10,38 +10,50 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Color.Cyan,
+    onPrimary = Color.White,
+
+    secondary = Color.Green,
+    onSecondary = Color.Green,
+
+    tertiary = Color.Green,
+    onTertiary = Color.Green,
+
+    background = Color.Black,
+    onBackground = Color.Green,
+
+    surface = Color.Transparent,
+    onSurface = Color.Green
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = Color.Magenta,
+    onPrimary = Color.Cyan,
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary = Color.Green,
+    onSecondary = Color.Green,
+
+    tertiary = Color.Green,
+    onTertiary = Color.Green,
+
+    background = Color.White,
+    onBackground = Color.Black,
+
+    surface = Color.Transparent,
+    onSurface = Color.Green
 )
 
 @Composable
 fun GourmetSearchAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Android 12以上でダイナミックカラー
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -57,7 +69,7 @@ fun GourmetSearchAppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = colorScheme.primary.toArgb() // ステータスバー
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
