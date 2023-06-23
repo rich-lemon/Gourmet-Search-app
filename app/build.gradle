@@ -49,7 +49,7 @@ android {
 }
 
 dependencies {
-    // Material Icon
+    // Material Icons extended
     implementation 'androidx.compose.material:material-icons-extended:1.4.3'
 
     // Navigation
@@ -70,6 +70,9 @@ dependencies {
 
     // Coil
     implementation 'io.coil-kt:coil-compose:2.4.0'
+
+    // location
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.0')

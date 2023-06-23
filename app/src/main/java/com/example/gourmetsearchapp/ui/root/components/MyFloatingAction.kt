@@ -1,5 +1,9 @@
 package com.example.gourmetsearchapp.ui.root.components
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -9,25 +13,86 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.example.gourmetsearchapp.ui.NavigationRoute
+import com.example.gourmetsearchapp.ui.gourmetsearch.GourmetSearchViewModel
 import com.example.gourmetsearchapp.ui.theme.GourmetSearchAppTheme
+import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun MyFloatingActionButton() {
+fun MyFloatingActionButton(
+    navController: NavController,
+    locationPermissionRequest: ActivityResultLauncher<Array<String>>,
+    viewModel: GourmetSearchViewModel
+) {
+    // location
+    val context = LocalContext.current
+    val locationClient = remember {
+        LocationServices.getFusedLocationProviderClient(context)
+    }
+
     FloatingActionButton(
-        onClick = { /* TODO */ },
+        onClick = {
+            // Gourmet Search Screenにジャンプ
+            navController.navigate(NavigationRoute.GourmetSearch.route) {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+
+            // location
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // 位置情報へのアクセスをリクエスト
+                locationPermissionRequest.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    )
+                )
+            } else {
+                // 現在地を取得
+                locationClient.lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        location?.latitude
+                        location?.longitude
+                        viewModel.searchGourmet(
+                            lat = 34.67f, // 緯度
+                            lng = 135.52f, // 経度
+                        )
+                    }
+            }
+        },
         modifier = Modifier
             .size(80.dp)
             .border(
@@ -88,6 +153,6 @@ class hexagonShape : Shape {
 @Composable
 fun MyFloatingActionButtonPreview() {
     GourmetSearchAppTheme() {
-        MyFloatingActionButton()
+//        MyFloatingActionButton()
     }
 }

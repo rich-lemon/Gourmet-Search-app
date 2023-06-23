@@ -19,23 +19,21 @@ class GourmetSearchViewModel @Inject constructor(
     private val _state = mutableStateOf(GourmetSearchState())
     val state: State<GourmetSearchState> = _state
 
+    // 最初は現在地を取得しない
     init {
         Log.d("api", "request")
         searchGourmet(
-            key = "3e8644698ca42bf3",
             lat = 34.67f, // 緯度
             lng = 135.52f, // 経度
-            range = 5,
-            order = 4
         )
     }
 
     fun searchGourmet(
-        key: String,
+        key: String = "3e8644698ca42bf3",
         lat: Float, // 緯度
         lng: Float, // 経度
-        range: Int,
-        order: Int
+        range: Int = 5,
+        order: Int = 4,
     ) {
         gourmetSearchUseCase(
             key,

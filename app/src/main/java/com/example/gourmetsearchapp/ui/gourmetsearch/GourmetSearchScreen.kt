@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun GourmetSearchScreen(
     navController: NavController,
-    viewModel: GourmetSearchViewModel = hiltViewModel()
+    viewModel: GourmetSearchViewModel
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -42,7 +42,13 @@ fun GourmetSearchScreen(
                     navController.navigate(
                         NavigationRoute.GourmetDetail.route
                                 + "/${url}/${logoImage}/${name}/${address}/${open}/${close}"
-                    )
+                    ) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }

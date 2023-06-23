@@ -1,15 +1,13 @@
 package com.example.gourmetsearchapp.ui.root
 
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,12 +27,16 @@ import androidx.navigation.navArgument
 import com.example.gourmetsearchapp.ui.NavigationRoute
 import com.example.gourmetsearchapp.ui.gourmetsearch.GourmetSearchScreen
 import com.example.gourmetsearchapp.ui.gourmetdetail.GourmetDetailScreen
+import com.example.gourmetsearchapp.ui.gourmetsearch.GourmetSearchViewModel
 import com.example.gourmetsearchapp.ui.root.components.MyFloatingActionButton
 import com.example.gourmetsearchapp.ui.root.components.MyTabRow
 import com.example.gourmetsearchapp.ui.theme.GourmetSearchAppTheme
 
 @Composable
-fun RootScreen() {
+fun RootScreen(
+    locationPermissionRequest: ActivityResultLauncher<Array<String>>,
+    viewModel: GourmetSearchViewModel = hiltViewModel()
+) {
     // NavController
     val navController = rememberNavController()
 
@@ -65,7 +68,7 @@ fun RootScreen() {
                     ) {
                         // グルメ検索画面
                         composable(NavigationRoute.GourmetSearch.route) {
-                            GourmetSearchScreen(navController)
+                            GourmetSearchScreen(navController, viewModel)
                         }
                         // グルメ詳細画面
                         composable(NavigationRoute.GourmetDetail.route) {
@@ -108,7 +111,7 @@ fun RootScreen() {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                MyFloatingActionButton()
+                MyFloatingActionButton(navController, locationPermissionRequest, viewModel)
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -123,6 +126,6 @@ fun RootScreen() {
 @Composable
 fun RootScreenPreview() {
     GourmetSearchAppTheme {
-        RootScreen()
+//        RootScreen()
     }
 }

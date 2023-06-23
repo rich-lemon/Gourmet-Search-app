@@ -58,7 +58,7 @@ fun MyTabRow(navController: NavController) {
 
         items.forEachIndexed() { index, screen ->
             MyTab(
-                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                selected = currentDestination?.hierarchy?.any { state == index } == true,
                 onClick = {
                     state = index
                     navController.navigate(screen.route) {
