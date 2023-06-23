@@ -4,10 +4,12 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Divider
@@ -45,10 +47,7 @@ fun MyTabRow(navController: NavController) {
             )
         },
         divider = {
-            Divider(
-                thickness = 3.dp,
-                color = MaterialTheme.colorScheme.onBackground.copy(0.2f)
-            )
+            Divider(thickness = 0.dp)
         }
     ) {
         // NavController
@@ -59,7 +58,7 @@ fun MyTabRow(navController: NavController) {
 
         items.forEachIndexed() { index, screen ->
             MyTab(
-                selected = currentDestination?.hierarchy?.any { state == index } == true,
+                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
                     state = index
                     navController.navigate(screen.route) {
@@ -70,10 +69,20 @@ fun MyTabRow(navController: NavController) {
                         restoreState = true
                     }
                 },
-                icon = {
+                selectedIcon = {
                     Icon(
-                        screen.icon,
-                        contentDescription = screen.description
+                        screen.selectedIcon,
+                        modifier = Modifier.size(35.dp),
+                        contentDescription = screen.description,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                unSelectedIcon = {
+                    Icon(
+                        screen.unSelectedIcon,
+                        modifier = Modifier.size(35.dp),
+                        contentDescription = screen.description,
+                        tint = MaterialTheme.colorScheme.onBackground.copy(0.2f)
                     )
                 }
             )
@@ -83,9 +92,8 @@ fun MyTabRow(navController: NavController) {
 
 // offset
 fun Modifier.myTabOffset(tabPosition: TabPosition): Modifier = composed {
-    val width = 100.dp
     val offset by animateDpAsState(
-        targetValue = tabPosition.left + tabPosition.width / 2 - width / 2,
+        targetValue = tabPosition.left,
         animationSpec = tween(
             durationMillis = 500,
             easing = FastOutSlowInEasing
@@ -93,26 +101,45 @@ fun Modifier.myTabOffset(tabPosition: TabPosition): Modifier = composed {
     )
 
     fillMaxWidth()
-        .wrapContentSize(Alignment.BottomStart)
+        .wrapContentSize(Alignment.TopStart)
         .offset(x = offset)
-        .width(width)
+        .width(tabPosition.width)
 }
 
 // tab
 @Composable
-fun MyTab(selected: Boolean, onClick: () -> Unit, icon: @Composable () -> Unit) {
+fun MyTab(
+    selected: Boolean,
+    onClick: () -> Unit,
+    selectedIcon: @Composable () -> Unit,
+    unSelectedIcon: @Composable () -> Unit
+) {
     Tab(
         selected,
         onClick
     ) {
-        Column(
-            modifier = Modifier
-                .height(100.dp)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+        Box(
+            contentAlignment = Alignment.TopCenter
         ) {
-            icon()
+            // icon
+            Column(
+                modifier = Modifier
+                    .height(75.dp)
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                if (selected) {
+                    selectedIcon()
+                } else {
+                    unSelectedIcon()
+                }
+            }
+            // divider
+            Divider(
+                thickness = 3.dp,
+                color = MaterialTheme.colorScheme.onBackground.copy(0.2f)
+            )
         }
     }
 }

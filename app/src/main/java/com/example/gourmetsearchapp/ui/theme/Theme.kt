@@ -34,16 +34,16 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color.Magenta,
-    onPrimary = Color.Cyan,
+    primary = Color(255, 152, 0, 255),
+    onPrimary = Color.White,
 
-    secondary = Color.Green,
+    secondary = Color.White,
     onSecondary = Color.Green,
 
     tertiary = Color.Green,
     onTertiary = Color.Green,
 
-    background = Color.White,
+    background = Color.Transparent,
     onBackground = Color.Black,
 
     surface = Color.Transparent,
@@ -69,7 +69,7 @@ fun GourmetSearchAppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb() // ステータスバー
+            window.statusBarColor = colorScheme.onBackground.copy(0.3f).toArgb() // ステータスバー
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

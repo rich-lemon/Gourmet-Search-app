@@ -16,25 +16,22 @@ val Typography = Typography(
     ),
     headlineMedium = TextStyle(
         fontSize = 28.sp,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center
     ),
     titleMedium = TextStyle(
         color = Color.Magenta,
         fontSize = 22.sp,
-        fontWeight = FontWeight.Normal,
-        textAlign = TextAlign.Center
+        fontWeight = FontWeight.SemiBold,
     ),
     bodyMedium = TextStyle(
         color = Color.Black,
-        fontSize = 16.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Normal,
-        textAlign = TextAlign.Center
     ),
     labelMedium = TextStyle(
-        color = Color.Gray,
-        fontSize = 14.sp,
+        color = Color.Black,
+        fontSize = 12.sp,
         fontWeight = FontWeight.Medium,
-        textAlign = TextAlign.Center
     )
 )
