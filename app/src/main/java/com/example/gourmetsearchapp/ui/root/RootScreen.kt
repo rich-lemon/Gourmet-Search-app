@@ -30,12 +30,15 @@ import com.example.gourmetsearchapp.ui.gourmetdetail.GourmetDetailScreen
 import com.example.gourmetsearchapp.ui.gourmetsearch.GourmetSearchViewModel
 import com.example.gourmetsearchapp.ui.root.components.MyFloatingActionButton
 import com.example.gourmetsearchapp.ui.root.components.MyTabRow
+import com.example.gourmetsearchapp.ui.settings.SettingsScreen
+import com.example.gourmetsearchapp.ui.settings.SettingsViewModel
 import com.example.gourmetsearchapp.ui.theme.GourmetSearchAppTheme
 
 @Composable
 fun RootScreen(
     locationPermissionRequest: ActivityResultLauncher<Array<String>>,
-    viewModel: GourmetSearchViewModel = hiltViewModel()
+    viewModel: GourmetSearchViewModel = hiltViewModel(),
+    viewModel2: SettingsViewModel = hiltViewModel()
 ) {
     // NavController
     val navController = rememberNavController()
@@ -72,7 +75,7 @@ fun RootScreen(
                         }
                         // グルメ詳細画面
                         composable(NavigationRoute.GourmetDetail.route) {
-                            GourmetDetailScreen(null, null, "", "", "", "")
+                            SettingsScreen(viewModel2)
                         }
                         // グルメ詳細画面（URLあり）
                         composable(
@@ -111,7 +114,7 @@ fun RootScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                MyFloatingActionButton(navController, locationPermissionRequest, viewModel)
+                MyFloatingActionButton(navController, locationPermissionRequest, viewModel, viewModel2)
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()

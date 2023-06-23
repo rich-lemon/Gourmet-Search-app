@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.gourmetsearchapp.ui.NavigationRoute
 import com.example.gourmetsearchapp.ui.gourmetsearch.GourmetSearchViewModel
+import com.example.gourmetsearchapp.ui.settings.SettingsViewModel
 import com.example.gourmetsearchapp.ui.theme.GourmetSearchAppTheme
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.scopes.ViewModelScoped
@@ -45,7 +46,8 @@ import kotlin.math.sin
 fun MyFloatingActionButton(
     navController: NavController,
     locationPermissionRequest: ActivityResultLauncher<Array<String>>,
-    viewModel: GourmetSearchViewModel
+    viewModel: GourmetSearchViewModel,
+    viewModel2: SettingsViewModel
 ) {
     // location
     val context = LocalContext.current
@@ -89,6 +91,7 @@ fun MyFloatingActionButton(
                         viewModel.searchGourmet(
                             lat = 34.67f, // 緯度
                             lng = 135.52f, // 経度
+                            range = viewModel2.state.value.range
                         )
                     }
             }

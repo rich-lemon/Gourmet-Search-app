@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gourmetsearchapp.domain.NetworkResponse
 import com.example.gourmetsearchapp.domain.usecase.GourmetSearchUseCase
+import com.example.gourmetsearchapp.ui.settings.SettingsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,6 +19,8 @@ class GourmetSearchViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = mutableStateOf(GourmetSearchState())
     val state: State<GourmetSearchState> = _state
+
+
 
     // 最初は現在地を取得しない
     init {
