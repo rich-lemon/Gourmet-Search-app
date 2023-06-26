@@ -1,5 +1,6 @@
 package com.example.gourmetsearchapp.ui.settings
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,9 +30,10 @@ import com.example.gourmetsearchapp.ui.theme.GourmetSearchAppTheme
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel) {
+    viewModel: SettingsViewModel
+) {
     val radioOptions = listOf("300", "500", "1000", "2000", "3000")
-    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[0]) }
+    val (selectedOption, onOptionSelected) = remember { mutableStateOf(radioOptions[4]) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -48,7 +50,12 @@ fun SettingsScreen(
                         .height(60.dp)
                         .selectable(
                             selected = (text == selectedOption),
-                            onClick = { onOptionSelected(text) },
+                            onClick = {
+                                onOptionSelected(text)
+                                // 検索範囲を指定
+                                viewModel.setRange(range = radioOptions.indexOf(text) + 1)
+                                Log.d("radio button", "range: ${viewModel.state.value.range}")
+                            },
                             role = Role.RadioButton
                         )
                         .padding(horizontal = 16.dp),
@@ -56,10 +63,7 @@ fun SettingsScreen(
                 ) {
                     RadioButton(
                         selected = (text == selectedOption),
-//                        onClick = null
-                        onClick = {
-                            viewModel.setRange(range = radioOptions.indexOf(text) + 1)
-                        }
+                        onClick = null
                     )
                     Text(
                         text = text,
