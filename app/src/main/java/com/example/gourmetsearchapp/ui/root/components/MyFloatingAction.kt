@@ -3,6 +3,7 @@ package com.example.gourmetsearchapp.ui.root.components
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
@@ -86,13 +87,17 @@ fun MyFloatingActionButton(
                 // 現在地を取得
                 locationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
-                        location?.latitude
-                        location?.longitude
-                        viewModel.searchGourmet(
-                            lat = 34.67f, // 緯度
-                            lng = 135.52f, // 経度
-                            range = viewModel2.state.value.range
-                        )
+                        val lat = location?.latitude?.toFloat()
+                        val lng = location?.longitude?.toFloat()
+                        Log.d("location", "latitude： $lat")
+                        Log.d("location", "longitude: $lng")
+                        if (lat != null && lng != null) {
+                            viewModel.searchGourmet(
+                                lat = lat ?: lat, // 緯度
+                                lng = lng ?: lng, // 経度
+                                range = viewModel2.state.value.range
+                            )
+                        }
                     }
             }
         },
